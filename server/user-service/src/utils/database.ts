@@ -1,23 +1,23 @@
-const { Sequelize } = require("sequelize");
+import { Sequelize } from "sequelize";
 
 if (process.env.NODE_ENV !== "production") {
    require("dotenv").config();
 }
 
 // Database connection
-const sequelize = new Sequelize({
+const sequelizeDB = new Sequelize({
    database: process.env.MYSQLDATABASE,
    username: process.env.MYSQLUSER,
    password: process.env.MYSQLPASSWORD,
    host: process.env.MYSQLHOST,
-   port: process.env.MYSQLPORT,
+   port: Number(process.env.MYSQLPORT) ?? 3306,
    dialect: "mysql",
 });
 
 // chech if connection is good //! DELETE later
-sequelize.authenticate()
+sequelizeDB.authenticate()
    .then(() => console.log('Connection has been established successfully.'))
-   .catch(e => console.error('Unable to connect to the database:', e));
+   .catch((e: any) => console.error('Unable to connect to the database: ', e));
 
-module.exports = sequelize;
+export default sequelizeDB;
  
