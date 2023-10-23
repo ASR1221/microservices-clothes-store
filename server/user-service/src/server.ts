@@ -1,9 +1,13 @@
-const express = require("express");
-const helmet = require("helmet");
-const compression = require("express-compression");
-const sequelize = require("./utils/database");
+import { NextFunction, Request, Response } from "express";
+import express from "express";
 
-// const Users = require("./models/userModels/usersModel");
+import helmet from "helmet";
+import compression from "compression";
+import sequelizeDB from "./utils/database";
+
+import router from "./routes/userRoute";
+
+// import Users from "./models/usersModel";
 
 const app = express();
 
@@ -19,7 +23,7 @@ app.use(helmet());
 app.use(helmet.hidePoweredBy());
 app.use(compression());
 app.use(express.json());
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
 // database sync (should import model to work) //! DELETE after sync is complete
 // sequelize.sync({ alter: true})
@@ -27,15 +31,15 @@ app.use(express.static("public"));
 //    .catch(e => console.log(`database sync error: ${e}`));
 
 // routes
-app.use("/api/native", require("./routes/mainRoute"));
-app.use("/api", require("./routes/mainRoute"));
+app.use("/api/user/native", router);
+app.use("/api/user", router);
 
 // Handling 404 (Not found)
-app.use((req, res, next) => {
-   res.redirect("/");
+app.use((req: Request, res: Response, next: NextFunction) => {
+   res.status(404).json({ message: "Route not found." });
 });
 
 // Error handler
-app.use((err, req, res, next) => res.status(err.status || 500).json({ message: err.message }));
+app.use((err: any, req: Request, res: Response, next: NextFunction) => res.status(err.status || 500).json({ message: err.message }));
 
 app.listen(process.env.PORT || 3000);
