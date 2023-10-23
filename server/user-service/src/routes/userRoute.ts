@@ -1,14 +1,19 @@
-const userController = require("../controllers/userController");
-const session = require("../middlewares/Session");
+import express from "express";
 
-const router = require("express").Router();
+import { facebookUser, googleUser, setUserInfo, getUserInfo, checkUser } from "../controllers/userController";
+import createSession from "../middlewares/createSession";
+import checkAndRecreateSessionMiddleware from "../middlewares/checkAndRecreateSessionMiddleware";
 
-router.post("/auth/google", userController.googleUser, session.createSession);
+const router = express.Router();
 
-router.post("/auth/facebook", userController.facebookUser, session.createSession); 
+router.post("/auth/google", googleUser, createSession);
 
-router.post("/info/set", session.checkAndRecreateSession, userController.setUserInfo);
+router.post("/auth/facebook", facebookUser, createSession); 
 
-router.get("/info/get", session.checkAndRecreateSession, userController.getUserInfo);
+router.get("/auth/check", checkUser);
 
-module.exports = router;
+router.post("/info/set", checkAndRecreateSessionMiddleware, setUserInfo);
+
+router.get("/info/get", checkAndRecreateSessionMiddleware, getUserInfo);
+
+export default router;
