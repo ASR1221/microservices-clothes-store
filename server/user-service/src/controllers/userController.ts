@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { Op } from "sequelize";
 
 import Users from "../models/usersModel";
+import Admins from "../models/adminsModel";
 import countries from "../constants/countries";
 import CustomError from "../types/customError";
 import checkAndRecreateSession from "../utils/checkAndRecreateSession";
@@ -144,7 +145,7 @@ export function setUserInfo(req: Request, res: Response, next: NextFunction) {
          id: req.user.user_id
       }
    })
-      .then(() => res.status(200).json({ message: "Location and phone number saved" }))
+      .then(() => res.status(200).json({ message: "Location and phone number saved", sessionToken: req.user.sessionToken }))
       .catch(e => next(e));
 }
 
@@ -165,4 +166,28 @@ export function checkUser(req: Request, res: Response, next: NextFunction) {
    checkAndRecreateSession(req, next);
 
    res.status(200).json(req.user);
+}
+
+export async function checkRole(req: Request, res: Response, next: NextFunction) {
+   const { user_id } = req.user;
+
+   try {
+      const admins = await Admins.findAll({ where: { user_id } }) as any[];
+      
+      if (admins.length < 1) {
+         const error = new Error("You are not allowed to visit this route.") as CustomError;
+         error.status = 401;
+         return next(error);
+      }
+   
+      const roles = admins.map(admin => admin.role);
+      
+      return res.status(200).json({
+         sessionToken: req.user.sessionToken,
+         roles,
+      });
+
+   } catch (e) {
+      return next(e);
+   }
 }
