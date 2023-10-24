@@ -1,6 +1,8 @@
+import express from "express";
+
 import { listItems, itemDetails, searchItem, checkAvailable, decrementStock } from "../controllers/itemsController";
 
-const router = require("express").Router();
+const router = express.Router();
 
 router.get("/list", listItems); // must send query params like => /list?section=men&type=jeans  //* type is optional
 

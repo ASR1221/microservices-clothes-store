@@ -1,7 +1,9 @@
+import express from "express";;
+
 import { makeOrder, getOrder, getOrderDetails } from "../controllers/orderController";
 import authMiddleware from "../middlewares/authMiddleware";
 
-const router = require("express").Router();
+const router = express.Router();
 
 router.post("/make", authMiddleware, makeOrder);
 

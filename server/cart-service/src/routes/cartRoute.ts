@@ -1,7 +1,9 @@
+import express from "express";
+
 import { addToCart, listCartItems, updateCartItem, removeFromCart, removeAll } from "../controllers/cartController";
 import authMiddleware from "../middlewares/authMiddleware";
 
-const router = require("express").Router();
+const router = express.Router();
 
 router.post("/add", authMiddleware, addToCart);
 
