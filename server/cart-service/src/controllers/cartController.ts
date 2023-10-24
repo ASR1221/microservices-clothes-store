@@ -53,8 +53,8 @@ export async function addToCart(req: Request, res: Response, next: NextFunction)
 
       itemsTemp.forEach(item => {
          if (!item.ok) {
-            const error = new Error("items-service response error. Check items-service and repeat this request.") as CustomError;
-            error.status = 500;
+            const error = new Error(`items-service response error: ${item.statusText}`) as CustomError;
+            error.status = item.status;
             return next(error);
          }
          const jsonReady = item.json();
@@ -116,8 +116,8 @@ export async function listCartItems(req: Request, res: Response, next: NextFunct
 
       itemsTemp.forEach(item => {
          if (!item.ok) {
-            const error = new Error("items-service response error. Check items-service and repeat this request.") as CustomError;
-            error.status = 500;
+            const error = new Error(`items-service response error: ${item.statusText}`) as CustomError;
+            error.status = item.status;
             return next(error);
          }
 
@@ -149,8 +149,8 @@ export async function updateCartItem(req: Request, res: Response, next: NextFunc
       const itemAvalResponse = await fetch(`${process.env.USER_SERVICE_URL}/item/available?item_details_id=${item_details_id}&item_count=${item_count}`);
       
       if (!itemAvalResponse.ok) {
-         const error = new Error("items-service response error. Check items-service and repeat this request.") as CustomError;
-         error.status = 500;
+         const error = new Error(`items-service response error: ${itemAvalResponse.statusText}`) as CustomError;
+            error.status = itemAvalResponse.status;
          return next(error);
       }
 

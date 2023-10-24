@@ -24,8 +24,8 @@ export default async function authMiddleware(req: Request, res: Response, next: 
       });
 
       if (!authResponse.ok) {
-         const error = new Error("users-service response error. Check users-service and repeat this request.") as CustomError;
-         error.status = 500;
+         const error = new Error(`users-service response error: ${authResponse.statusText}`) as CustomError;
+         error.status = authResponse.status;
          return next(error);
       }
 
