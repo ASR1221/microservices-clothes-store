@@ -184,8 +184,7 @@ export async function searchItem(req: Request, res: Response, next: NextFunction
 }
 
 
-// below is for cart-service usage
-
+// checkAvailable is for cart-service usage   //* when an items is to be added to cart, the item has to available
 export async function checkAvailable(req: Request, res: Response, next: NextFunction) {
 
    const { item_details_id, item_count } = req.query;
@@ -218,5 +217,52 @@ export async function checkAvailable(req: Request, res: Response, next: NextFunc
    } catch (e) {
       return next(e);
    }
+}
 
+type ItemToDecrement = {
+   item_id: string,
+   details: {
+      item_details_id: string,
+      item_count: number,
+   }[]
+}
+
+// decrementStock is for order-service usage   //* when an order is made, the stock of the items ordered has to decrease
+export async function decrementStock(req: Request, res: Response, next: NextFunction) {
+   const item: ItemToDecrement = req.body;
+
+   if (!item) {
+      const error = new Error("No items to decrement.") as CustomError;
+      error.status = 400;
+      return next(error);
+   }
+
+   try {
+
+      const promise1: Promise<any>[] = [];
+      const counts: number[] = [];
+
+      item.details.forEach(detail => {
+         promise1.push(ItemsDetails.findByPk(detail.item_details_id));
+         counts.push(detail.item_count);
+      });
+
+      const dbItemsDetails = await Promise.all(promise1);
+
+      dbItemsDetails.forEach((item, i) => {
+         item.decrement("stock", { by: counts[i] });
+      });
+
+      const allItemDetails = await ItemsDetails.findAll({
+         where: { item_id: item.item_id },
+         attributes: ["stock"],
+      }) as any[];
+
+      if (allItemDetails.some((item) => item.stock > 0) === false) {
+         await Items.update({ available: false }, { where: { id: item.item_id } });
+      }
+      
+   } catch (e) {
+      return next(e);
+   }
 }
