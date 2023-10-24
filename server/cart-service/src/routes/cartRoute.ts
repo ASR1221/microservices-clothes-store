@@ -1,4 +1,4 @@
-import { addToCart, listCartItems, updateCartItem, removeFromCart } from "../controllers/cartController";
+import { addToCart, listCartItems, updateCartItem, removeFromCart, removeAll } from "../controllers/cartController";
 import authMiddleware from "../middlewares/authMiddleware";
 
 const router = require("express").Router();
@@ -10,5 +10,7 @@ router.get("/list", authMiddleware, listCartItems);
 router.put("/update", authMiddleware, updateCartItem);
 
 router.delete("/remove/:id", authMiddleware, removeFromCart);
+
+router.delete("/remove", authMiddleware, removeAll);
 
 export default router;

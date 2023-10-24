@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 
-import { Op } from "sequelize";
 import dotenv from "dotenv";
 
 if (process.env.NODE_ENV !== "production") {
@@ -42,7 +41,7 @@ export async function addToCart(req: Request, res: Response, next: NextFunction)
    try {
       const promises: Promise<any>[] = [];
       items.forEach(item => {
-         const itemAvalResponse = fetch(`${process.env.USER_SERVICE_URL}/item/available?item_details_id=${item.item_details_id}&item_count=${item.item_count}`);
+         const itemAvalResponse = fetch(`${process.env.ITEMS_SERVICE_URL}/detail/available?item_details_id=${item.item_details_id}&item_count=${item.item_count}`);
 
          promises.push(itemAvalResponse);
       });
@@ -105,7 +104,7 @@ export async function listCartItems(req: Request, res: Response, next: NextFunct
 
       const promises: Promise<any>[] = [];
       cartItemsTemp.forEach(item => {
-         const itemAvalResponse = fetch(`${process.env.USER_SERVICE_URL}/item/available?item_details_id=${item.item_details_id}`);
+         const itemAvalResponse = fetch(`${process.env.ITEMS_SERVICE_URL}/detail/available?item_details_id=${item.item_details_id}`);
 
          promises.push(itemAvalResponse);
       });
@@ -146,7 +145,7 @@ export async function updateCartItem(req: Request, res: Response, next: NextFunc
 
    try {
 
-      const itemAvalResponse = await fetch(`${process.env.USER_SERVICE_URL}/item/available?item_details_id=${item_details_id}&item_count=${item_count}`);
+      const itemAvalResponse = await fetch(`${process.env.ITEMS_SERVICE_URL}/detail/available?item_details_id=${item_details_id}&item_count=${item_count}`);
       
       if (!itemAvalResponse.ok) {
          const error = new Error(`items-service response error: ${itemAvalResponse.statusText}`) as CustomError;
@@ -209,3 +208,14 @@ export async function removeFromCart(req: Request, res: Response, next: NextFunc
       return next(e);
    }
 }
+
+
+// removeAll for order-service usage   //* when a user makes an order, all cart items are removd
+export async function removeAll(req: Request, res: Response, next: NextFunction) {
+
+   try {
+      await Cart.destroy({ where: { user_id: req.user.user_id } });
+   } catch (e) {
+      return next(e);
+   }
+} 
