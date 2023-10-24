@@ -3,6 +3,8 @@ import express from "express";
 
 import helmet from "helmet";
 import compression from "compression";
+import dotenv from "dotenv";
+import logger from "morgan";
 import sequelizeDB from "./utils/database";
 
 import router from "./routes/userRoute";
@@ -13,8 +15,7 @@ const app = express();
 
 // Development imports
 if (process.env.NODE_ENV !== "production") {
-   require("dotenv").config();
-   const logger = require("morgan");
+   dotenv.config();
    app.use(logger("dev"));
 }
 
