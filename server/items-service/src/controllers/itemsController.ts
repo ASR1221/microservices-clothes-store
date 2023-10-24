@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import CustomError from "../types/customError";
 
 import { Op } from "sequelize";
+
 import ItemsImages from "../models/imagesModel";
 import ItemsDetails from "../models/itemsDetailsModel";
 import Items from "../models/itemsModel";
+import CustomError from "../types/customError";
 
 export async function listItems(req: Request, res: Response, next: NextFunction) {
    const { section, type, page } = req.query;
@@ -180,4 +181,42 @@ export async function searchItem(req: Request, res: Response, next: NextFunction
    } catch (e) {
       return next(e);
    }
+}
+
+
+// below is for cart-service usage
+
+export async function checkAvailable(req: Request, res: Response, next: NextFunction) {
+
+   const { item_details_id, item_count } = req.query;
+
+   const whereClause: {
+      id: string,
+      stock?: any,
+   } = {
+      id: item_details_id as string,
+   };
+
+   if (item_count) whereClause.stock = { [Op.gt]: Number(item_count) ?? 0 }
+
+   try {
+      const item = await ItemsDetails.findOne({
+         where: whereClause,
+         include: [{
+            model: Items,
+            attributes: ["price", "available", "name", "image_path"],
+         }],
+      });
+      
+      if (!item) {
+         const error = new Error("Sorry, we don't have this amount of the item.") as CustomError;
+         error.status = 400;
+         return next(error);
+      }
+   
+      return res.status(200).json(item);
+   } catch (e) {
+      return next(e);
+   }
+
 }
