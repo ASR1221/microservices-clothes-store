@@ -129,6 +129,9 @@ export async function makeOrder(req: Request, res: Response, next: NextFunction)
             await Promise.all(
                items.map(i => fetch(`${process.env.CART_SERVICE_URL}/remove`, {
                   method: "PATCH",
+                  headers: {
+                     "Authorization": req.headers.authorization as string,
+                  },
                   body: JSON.stringify(i),
                }))
             );
