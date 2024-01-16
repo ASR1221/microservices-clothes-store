@@ -7,9 +7,9 @@ const OrderItems = sequelize.define(
    "orderItems",
    {
       id: {
-         type: DataTypes.UUID,
+         type: DataTypes.BIGINT,
          primaryKey: true,
-         defaultValue: DataTypes.UUIDV4,
+         autoIncrement: true,
          allowNull: false,
          unique: true,
       },
