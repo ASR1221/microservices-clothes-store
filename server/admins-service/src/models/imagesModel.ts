@@ -1,9 +1,9 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../utils/database";
+import { sequelizeItemDB } from "../utils/database";
 
 import Items from "./itemsModel";
 
-const ItemsImages = sequelize.define("itemsImages", {
+const ItemsImages = sequelizeItemDB.define("itemsImages", {
    id: {
       type: DataTypes.BIGINT,
       primaryKey: true,

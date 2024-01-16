@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== "production") {
    dotenv.config();
 }
 
-export default async function authMiddleware(req: Request, res: Response, next: NextFunction) {
+export default async function CheckRole(req: Request, res: Response, next: NextFunction) {
 
    const { user_id } = req.user;
 

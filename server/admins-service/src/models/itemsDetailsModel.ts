@@ -1,11 +1,11 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../utils/database";
+import { sequelizeItemDB } from "../utils/database";
 
 import Items from "./itemsModel";
 import SIZES from "../constants/sizes";
 import COLORS from "../constants/colors";
 
-const ItemsDetails = sequelize.define("itemsDetails", {
+const ItemsDetails = sequelizeItemDB.define("itemsDetails", {
    id: {
       type: DataTypes.BIGINT,
       primaryKey: true,

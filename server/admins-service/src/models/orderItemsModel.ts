@@ -1,9 +1,9 @@
 import { DataTypes } from "sequelize";
 
-import sequelize from "../utils/database";
+import { sequelizeOrderDB } from "../utils/database";
 import Order from "./orderModel";
 
-const OrderItems = sequelize.define(
+const OrderItems = sequelizeOrderDB.define(
    "orderItems",
    {
       id: {

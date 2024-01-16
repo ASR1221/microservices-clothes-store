@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 
-import sequelize from "../utils/database";
+import { sequelizeUserDB } from "../utils/database";
 
-const Users = sequelize.define("users", {
+const Users = sequelizeUserDB.define("users", {
    id: {
       type: DataTypes.UUID,
       primaryKey: true,

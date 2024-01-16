@@ -5,7 +5,7 @@ import helmet from "helmet";
 import compression from "compression";
 import dotenv from "dotenv";
 import logger from "morgan";
-import sequelizeDB from "./utils/database";
+import { sequelizeItemDB, sequelizeOrderDB, sequelizeUserDB } from "./utils/database";
 
 import router from "./routes/adminsRoute";
 
@@ -27,11 +27,6 @@ app.use(helmet.hidePoweredBy());
 app.use(compression());
 app.use(express.json());
 app.use(express.static("public"));
-
-// database sync (should import model to work) //! DELETE after sync is complete
-// sequelizeDB.sync({ alter: true})
-   // .then(() => console.log("database syncd"))
-   // .catch((e: any) => console.log(`database sync error: ${e}`));
 
 // routes
 app.use("/api/admin/native", router);
