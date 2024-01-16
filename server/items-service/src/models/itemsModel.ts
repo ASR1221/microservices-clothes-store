@@ -11,6 +11,7 @@ const Items = sequelize.define("items", {
    },
    name: {
       type: DataTypes.STRING(30),
+      allowNull: false,
    },
    price: {
       type: DataTypes.DECIMAL(5,2),
@@ -18,6 +19,7 @@ const Items = sequelize.define("items", {
    },
    image_path: {
       type: DataTypes.STRING(255),
+      allowNull: false,
    },
    section: {
       type: DataTypes.ENUM("men", "women", "kids"),

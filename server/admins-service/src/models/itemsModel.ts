@@ -11,6 +11,7 @@ const Items = sequelize.define("items", {
    },
    name: {
       type: DataTypes.STRING(30),
+      allowNull: false,
    },
    price: {
       type: DataTypes.DECIMAL(5,2),
