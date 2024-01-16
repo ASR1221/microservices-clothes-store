@@ -27,9 +27,9 @@ app.use(express.json());
 // app.use(express.static("public"));
 
 // database sync (should import model to work) //! DELETE after sync is complete
-// sequelize.sync({ alter: true})
-//    .then(() => console.log("database syncd"))
-//    .catch(e => console.log(`database sync error: ${e}`));
+// sequelizeDB.sync({ alter: true})
+   // .then(() => console.log("database syncd"))
+   // .catch((e: any) => console.log(`database sync error: ${e}`));
 
 // routes
 app.use("/api/user/native", router);
