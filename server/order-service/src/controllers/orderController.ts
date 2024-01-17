@@ -1,14 +1,20 @@
 import { NextFunction, Request, Response } from "express";
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
 
 import OrderItems from "../models/orderItemsModel";
 import Order from "../models/orderModel";
 import CustomError from "../types/customError";
 
+if (process.env.NODE_ENV !== "production") {
+   dotenv.config();
+}
+
 export async function makeOrder(req: Request, res: Response, next: NextFunction) {
    const { user_id, sessionToken } = req.user;
-   const { payment_method, credit_card } = req.body;
+   const { payment_method, payment_service } = req.body;
 
-   if (!(payment_method && (payment_method === "cash" || (payment_method === "credit-card" && credit_card)) )) {
+   if (!(payment_method && (payment_method === "cash" || (payment_method === "credit-card" && payment_service)) )) {
       const error = new Error("Missing Information. Please try again.") as CustomError;
       error.status = 400;
       return next(error);
@@ -71,7 +77,7 @@ export async function makeOrder(req: Request, res: Response, next: NextFunction)
 
       const order = await Order.create({
          payment_method,
-         credit_card: credit_card ? credit_card : null,
+         payment_service: payment_service ?? null,
          order_price,
          user_id,
       }) as any;
@@ -84,9 +90,53 @@ export async function makeOrder(req: Request, res: Response, next: NextFunction)
       });
       
       await OrderItems.bulkCreate(items);
-      
-      res.status(200).json({ message: "Order made successfully", sessionToken });
 
+      // Payment here
+      const ZAINCASH_URL = process.env.URL as string;
+      const TRANSACTION_INIT_ROUTE = process.env.TRANSACTION_INIT_ROUTE as string;
+      const MSISDN = process.env.MSISDN as string;
+      const MERCHANT_ID = process.env.MERCHANT_ID as string;
+      const MERCHANT_SECRET = process.env.MERCHANT_SECRET as string;
+
+      const data = {
+         amount: order_price,
+         serviceType: "clothes order",
+         msisdn: MSISDN,
+         orderId: order.id,
+         redirectUrl: `${process.env.ORDER_SERVICE_URL}/order/payment/complete`,
+      };
+
+      let token: string;
+      jwt.sign(data, MERCHANT_SECRET, {
+         expiresIn: Date.now() + (1000 * 10),
+      }, async (err, token) => {
+         if (err) {
+            return next(err);
+         }
+
+         const postData = {
+            token,
+            merchantId: MERCHANT_ID,
+            lang: "en",
+         };
+
+         const response = await fetch(`${ZAINCASH_URL}${TRANSACTION_INIT_ROUTE}`, {
+            method: "POST",
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(postData),
+         });
+
+         if (!response.ok) {
+            return next(`ZAINCASH ERROR: ${response.statusText}`);
+         }
+
+         const data = await response.json();
+
+         res.status(200).json({ id: data.id, sessionToken, });
+      });
+      
       // run a check to see if more items are available and update accordinglly
       async function onFinish() {
          try {
@@ -199,3 +249,34 @@ export async function getOrderDetails(req: Request, res: Response, next: NextFun
       return next(e);
    }
 };
+
+
+export async function completePayment(req: Request, res: Response, next: NextFunction) {
+
+   const token = req.body.token;
+   const MERCHANT_SECRET = process.env.MERCHANT_SECRET as string;
+
+   if (!token) {
+      const error = new Error("No token received. Payment failed") as CustomError;
+      error.status = 400;
+      return next(error);
+   }
+   
+   jwt.verify(token, MERCHANT_SECRET, async (err: any, payload: any) => {
+
+      if (err) return next(err);
+
+      try {
+         await Order.update({
+            payment_status: payload.status === "failed" || payload.status === "pending" ? "failed" : "completed",
+         }, {
+            where: { id: payload.id, transaction_id: payload.id }
+         });
+
+         return res.status(200);
+      } catch (error) {
+         return next(error);
+      }
+
+   });
+}
