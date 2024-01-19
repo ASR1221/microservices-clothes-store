@@ -29,7 +29,6 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // routes
-app.use("/api/admin/native", router);
 app.use("/api/admin", router);
 
 // Handling 404 (Not found)

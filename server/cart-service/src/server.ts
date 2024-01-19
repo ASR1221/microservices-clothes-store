@@ -32,7 +32,6 @@ app.use(express.json());
    // .catch((e: any) => console.log(`database sync error: ${e}`));
 
 // routes
-app.use("/api/cart/native", router);
 app.use("/api/cart", router);
 
 // Handling 404 (Not found)

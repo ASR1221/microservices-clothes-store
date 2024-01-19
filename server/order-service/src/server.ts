@@ -33,7 +33,6 @@ app.use(express.json());
    // .catch((e: any) => console.log(`database sync error: ${e}`));
 
 // routes
-app.use("/api/order/native", router);
 app.use("/api/order", router);
 
 // Handling 404 (Not found)

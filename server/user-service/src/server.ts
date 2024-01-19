@@ -32,7 +32,6 @@ app.use(express.json());
    // .catch((e: any) => console.log(`database sync error: ${e}`));
 
 // routes
-app.use("/api/user/native", router);
 app.use("/api/user", router);
 
 // Handling 404 (Not found)

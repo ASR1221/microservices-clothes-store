@@ -30,7 +30,7 @@ export default function checkAndRecreateSession(req: Request, next: NextFunction
             return next(error)
          }
    
-         const expiresIn = req.path.includes("native") ? "7d" : "15m";
+         const expiresIn = "7d";
          jwt.sign(
             {
                id: data.id,
