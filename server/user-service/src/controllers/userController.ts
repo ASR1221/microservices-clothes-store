@@ -45,16 +45,29 @@ export async function googleUser(req: Request<{}, {}, { access_token: string }>,
             name,
             email,
          }
-      });
+      }) as any;
       
-      // const cartItemsCount = created ? 0 : await Cart.count({ where: { user_id: user.id } });
+      const cartResponse = await fetch(`${process.env.CART_SERVICE_URL}/api/cart/list`, {
+         headers: {
+            "Authorization": req.headers.authorization,
+         }
+      } as any);
 
-      // req.user = {
-      //    id: user.id,
-      //    name: user.name,
-      //    email,
-      //    cartItemsCount,
-      // }
+      if (!cartResponse.ok) {
+         const error = new Error("Error getting cart data.") as CustomError;
+         error.status = 400;
+         return next(error);
+      }
+
+      const cartItems = await cartResponse.json();
+
+      req.user = {
+         id: user.id,
+         name: user.name,
+         email,
+         cartItemsCount: cartItems.length,
+      }
+      
       return next();
 
    } catch (err) {
@@ -146,7 +159,7 @@ export function setUserInfo(req: Request, res: Response, next: NextFunction) {
       }
    })
       .then(() => res.status(200).json({ message: "Location and phone number saved", sessionToken: req.user.sessionToken }))
-      .catch(e => next(e));
+      .catch((e: any) => next(e));
 }
 
 export async function getUserInfo(req: Request, res: Response, next: NextFunction) {
@@ -162,8 +175,8 @@ export async function getUserInfo(req: Request, res: Response, next: NextFunctio
    }
 }
 
-export function checkUser(req: Request, res: Response, next: NextFunction) {
-   checkAndRecreateSession(req, next);
+export async function checkUser(req: Request, res: Response, next: NextFunction) {
+   await checkAndRecreateSession(req, next);
 
    res.status(200).json(req.user);
 }
