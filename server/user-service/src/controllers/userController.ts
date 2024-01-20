@@ -47,7 +47,7 @@ export async function googleUser(req: Request<{}, {}, { access_token: string }>,
          }
       }) as any;
       
-      const cartResponse = await fetch(`${process.env.CART_SERVICE_URL}/api/cart/list`, {
+      const cartResponse = await fetch(`${process.env.CART_SERVICE_URL}/list`, {
          headers: {
             "Authorization": req.headers.authorization,
          }
@@ -67,7 +67,7 @@ export async function googleUser(req: Request<{}, {}, { access_token: string }>,
          email,
          cartItemsCount: cartItems.length,
       }
-      
+
       return next();
 
    } catch (err) {
