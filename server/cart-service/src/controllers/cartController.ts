@@ -41,7 +41,7 @@ export async function addToCart(req: Request, res: Response, next: NextFunction)
    try {
       const promises: Promise<any>[] = [];
       items.forEach(item => {
-         const itemAvalResponse = fetch(`${process.env.ITEMS_SERVICE_URL}/detail/available?item_details_id=${item.item_details_id}&item_count=${item.item_count}`);
+         const itemAvalResponse = fetch(`${process.env.ITEM_SERVICE_URL}/detail/available?item_details_id=${item.item_details_id}&item_count=${item.item_count}`);
 
          promises.push(itemAvalResponse);
       });
@@ -104,7 +104,7 @@ export async function listCartItems(req: Request, res: Response, next: NextFunct
 
       const promises: Promise<any>[] = [];
       cartItemsTemp.forEach(item => {
-         const itemAvalResponse = fetch(`${process.env.ITEMS_SERVICE_URL}/detail/available?item_details_id=${item.item_details_id}`);
+         const itemAvalResponse = fetch(`${process.env.ITEM_SERVICE_URL}/detail/available?item_details_id=${item.item_details_id}`);
 
          promises.push(itemAvalResponse);
       });
@@ -145,7 +145,7 @@ export async function updateCartItem(req: Request, res: Response, next: NextFunc
 
    try {
 
-      const itemAvalResponse = await fetch(`${process.env.ITEMS_SERVICE_URL}/detail/available?item_details_id=${item_details_id}&item_count=${item_count}`);
+      const itemAvalResponse = await fetch(`${process.env.ITEM_SERVICE_URL}/detail/available?item_details_id=${item_details_id}&item_count=${item_count}`);
       
       if (!itemAvalResponse.ok) {
          const error = new Error(`items-service response error: ${itemAvalResponse.statusText}`) as CustomError;

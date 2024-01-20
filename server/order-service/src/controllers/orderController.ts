@@ -230,7 +230,7 @@ export async function getOrderDetails(req: Request, res: Response, next: NextFun
       ) as any[];
 
       const promises = orderDetails.map(o => 
-         fetch(`${process.env.ITEMS_SERVICE_URL}/detail/available?item_details_id=${o.item_details_id}`)
+         fetch(`${process.env.ITEM_SERVICE_URL}/detail/available?item_details_id=${o.item_details_id}`)
       );
 
       const orderItemsTemp = await Promise.all(promises);
