@@ -14,7 +14,7 @@ const Items = sequelize.define("items", {
       allowNull: false,
    },
    price: {
-      type: DataTypes.DECIMAL(5,2),
+      type: DataTypes.DECIMAL,
       allowNull: false,
    },
    image_path: {
