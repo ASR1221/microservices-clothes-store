@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 
 import CustomError from "../types/customError";
+import Admins from "../models/adminsModel";
 
 if (process.env.NODE_ENV !== "production") {
    dotenv.config();
@@ -13,19 +14,15 @@ export default async function CheckRole(req: Request, res: Response, next: NextF
    const { user_id } = req.user;
 
    try {
-      const roleResponse = await fetch(`${process.env.USER_SERVICE_URL}/auth/role`, {
-         headers: {
-            "Authorization": req.headers.authorization as string,
-         }
-      });
-
-      if (!roleResponse.ok) {
-         const error = new Error(`users-service response error: ${roleResponse.statusText}`) as CustomError;
-         error.status = roleResponse.status;
+      const admins = await Admins.findAll({ where: { user_id } });
+      
+      if (admins.length < 1) {
+         const error = new Error("You are not allowed to visit this route.") as CustomError;
+         error.status = 401;
          return next(error);
       }
-
-      const roles = await roleResponse.json();
+   
+      const roles = admins.map((admin: any) => admin.role);
       req.user.roles = roles;
 
       return next();
