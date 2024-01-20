@@ -9,9 +9,9 @@ import sequelizeDB from "./utils/database";
 
 import router from "./routes/itemsRoute";
 
-// import Items from "./models/itemsModel.ts";
-// import ItemsDetails from "./models/itemsDetailsModel.ts";
-// import ItemsImgs from "./models/imagesModel.ts";
+// import Items from "./models/itemsModel";
+// import ItemsDetails from "./models/itemsDetailsModel";
+// import ItemsImages from "./models/imagesModel";
 
 const app = express();
 
@@ -30,8 +30,8 @@ app.use(express.static("public"));
 
 // database sync (should import model to work) //! DELETE after sync is complete
 // sequelizeDB.sync({ alter: true})
-   // .then(() => console.log("database syncd"))
-   // .catch((e: any) => console.log(`database sync error: ${e}`));
+//    .then(() => console.log("database syncd"))
+//    .catch((e: any) => console.log(`database sync error: ${e}`));
 
 // routes
 app.use("/api/items", router);
