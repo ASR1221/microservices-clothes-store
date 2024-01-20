@@ -100,10 +100,10 @@ export async function listCartItems(req: Request, res: Response, next: NextFunct
       const cartItemsTemp = await Cart.findAll({
          where: { user_id },
          attributes: { exclude: ["user_id", "createdAt", "updatedAt"] },
-      }) as any[];
+      }) as any;
 
       const promises: Promise<any>[] = [];
-      cartItemsTemp.forEach(item => {
+      cartItemsTemp.forEach((item: any) => {
          const itemAvalResponse = fetch(`${process.env.ITEM_SERVICE_URL}/detail/available?item_details_id=${item.item_details_id}`);
 
          promises.push(itemAvalResponse);
@@ -125,7 +125,10 @@ export async function listCartItems(req: Request, res: Response, next: NextFunct
       });
       const itemsTemp2 = await Promise.all(promises2);
 
-      const cartItems = cartItemsTemp.map(item => ({ ...item, itemsDetail: itemsTemp2.find(d => d.id === item.item_details_id) ?? null }));
+      const cartItems = cartItemsTemp.map((item: any) => ({
+         ...item.dataValues,
+         ...itemsTemp2.find(d => d.itemDetailsId === item.item_details_id) ?? null,
+      }));
 
       return res.status(200).json(cartItems);
 
