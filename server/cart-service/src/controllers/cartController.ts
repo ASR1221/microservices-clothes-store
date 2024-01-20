@@ -152,7 +152,7 @@ export async function updateCartItem(req: Request, res: Response, next: NextFunc
       
       if (!itemAvalResponse.ok) {
          const error = new Error(`items-service response error: ${itemAvalResponse.statusText}`) as CustomError;
-            error.status = itemAvalResponse.status;
+         error.status = itemAvalResponse.status;
          return next(error);
       }
 
@@ -164,7 +164,7 @@ export async function updateCartItem(req: Request, res: Response, next: NextFunc
          return next(error);
       }
 
-      const total_price = parseFloat(item.item.price) * item_count;
+      const total_price = parseFloat(item.price) * item_count;
 
       const newCartItem = await Cart.update(
          { 
