@@ -128,8 +128,8 @@ export async function listPendingItems(req: Request, res: Response, next: NextFu
 
 export async function addNewItem(req: Request, res: Response, next: NextFunction) {
    const { sessionToken, roles } = req.user;
-   const { name, price, section, type, detailsP } = JSON.parse(req.body.json);
-   const details = detailsP as { color: string, sizes: { stock: number, size: string }[] }[];
+   const { name, price, section, type, details } = JSON.parse(req.body.json);
+   const detailsP = details as { color: string, sizes: { stock: number, size: string }[] }[];
    
    let item: any;
    try {
@@ -139,19 +139,19 @@ export async function addNewItem(req: Request, res: Response, next: NextFunction
          throw error;
       }
 
-      if (!(name && price && section && type && req.files && (details && details.length > 0))) {
+      if (!(name && price && section && type && req.files && (detailsP && detailsP.length > 0))) {
          const error = new Error("Missing Information. Please try again.") as CustomError;
          error.status = 400;
          throw error;
       }   
 
-      if (!(/^\d+(\.)+\d{1,2}$/.test(price))) {
+      if (!/^\d+$/.test(price)) {
          const error = new Error("price has to be a decimal number with 2 digits after the dot (example: 20.50)") as CustomError;
          error.status = 400;
          throw error;
       }
 
-      const allowCreate = details.every(obj => {
+      const allowCreate = detailsP.every(obj => {
          if (!COLORS.includes(obj.color)) {
             return false;
          }
@@ -186,9 +186,9 @@ export async function addNewItem(req: Request, res: Response, next: NextFunction
       await Promise.all(promises);
       promises = [];
 
-      details.forEach(obj => {
+      details.forEach((obj: any) => {
          
-         obj.sizes.forEach(elm => {
+         obj.sizes.forEach((elm: any) => {
             const promise = ItemsDetails.create({
                size: elm.size,
                color: obj.color,

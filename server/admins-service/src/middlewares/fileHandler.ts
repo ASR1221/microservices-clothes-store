@@ -1,18 +1,26 @@
 import { Request } from "express";
+import fs from "fs";
 
 import multer, { FileFilterCallback } from "multer";
 
 const storage = multer.diskStorage({
    destination: (req, file, cb) => {
-      cb(null, "../../../items-service/public/images/items");
+      const destination = "G:\\personal_learning\\webProjects\\microservices-clothes-store\\server\\items-service\\public\\images\\items";
+      fs.access(destination, (err) => {
+         if (err) {
+            // Handle the error, e.g., create the directory
+            fs.mkdirSync(destination, { recursive: true });
+         }
+         cb(null, destination);
+      });
    },
    filename: (req, file, cb) => {
-      cb(null, `${Date.now()}-${file.originalname}`);
+      cb(null, `${Date.now()}-${Math.round(Math.random() * 10000)}-${file.originalname}`);
    }
 });
 
 function fileFilter(req: Request, file: Express.Multer.File, cb: FileFilterCallback) {
-   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
       cb(null, true);
     } else {
       cb(new Error('Only JPEG and PNG images are allowed'));
