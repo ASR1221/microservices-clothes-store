@@ -1,12 +1,17 @@
 import { NextFunction, Request, Response } from "express";
 
 import { Op } from "sequelize";
+import dotenv from "dotenv";
 
 import Users from "../models/usersModel";
 import Admins from "../models/adminsModel";
 import countries from "../constants/countries";
 import CustomError from "../types/customError";
 import checkAndRecreateSession from "../utils/checkAndRecreateSession";
+
+if (process.env.NODE_ENV !== "production") {
+   dotenv.config();
+}
 
 export async function googleUser(req: Request<{}, {}, { access_token: string }>, res: Response, next: NextFunction) {
 
@@ -53,11 +58,11 @@ export async function googleUser(req: Request<{}, {}, { access_token: string }>,
          }
       } as any);
 
-      if (!cartResponse.ok) {
-         const error = new Error("Error getting cart data.") as CustomError;
-         error.status = 400;
-         return next(error);
-      }
+      // if (!cartResponse.ok) {
+      //    const error = new Error("Error getting cart data.") as CustomError;
+      //    error.status = 400;
+      //    return next(error);
+      // }
 
       const cartItems = await cartResponse.json();
 
