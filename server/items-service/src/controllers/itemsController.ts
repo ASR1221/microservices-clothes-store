@@ -203,17 +203,28 @@ export async function checkAvailable(req: Request, res: Response, next: NextFunc
          where: whereClause,
          include: [{
             model: Items,
-            attributes: ["price", "available", "name", "image_path"],
+            attributes: ["price", "available", "name", "image_path", "id"],
          }],
-      });
+      }) as any;
       
       if (!item) {
          const error = new Error("Sorry, we don't have this amount of the item.") as CustomError;
          error.status = 400;
          return next(error);
       }
+
+      const final = {
+         itemId: item.item.id,
+         itemDetailsId: item.id,
+         stock: item.stock,
+         color: item.color,
+         size: item.size,
+         name: item.item.name,
+         price: item.item.price,
+         img: item.item.image_path,
+      }
    
-      return res.status(200).json(item);
+      return res.status(200).json(final);
    } catch (e) {
       return next(e);
    }
