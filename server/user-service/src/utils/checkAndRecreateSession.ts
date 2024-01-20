@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 import CustomError from "../types/customError";
 
-export default function checkAndRecreateSession(req: Request, next: NextFunction) {
+export default async function checkAndRecreateSession(req: Request, next: NextFunction) {
 
    if (!req.headers.authorization) {
       const error = new Error("No session token. Please try logging in") as CustomError;
