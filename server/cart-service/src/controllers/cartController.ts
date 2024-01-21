@@ -67,8 +67,8 @@ export async function addToCart(req: Request, res: Response, next: NextFunction)
          let total_price = 0;
          let item_count = 0;
          items.forEach(item => {
-            if (item.item_details_id === priceObj.id) {
-               total_price = parseFloat(priceObj.item.price) * item.item_count;
+            if (item.item_details_id === priceObj.itemDetailsId) {
+               total_price = +priceObj.price * item.item_count;
                item_count = item.item_count;
             }
          });
@@ -76,7 +76,7 @@ export async function addToCart(req: Request, res: Response, next: NextFunction)
 
          return {
             user_id,
-            item_details_id: priceObj.id,
+            item_details_id: priceObj.itemDetailsId,
             item_count,
             total_price,
          };
