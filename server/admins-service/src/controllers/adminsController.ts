@@ -229,9 +229,9 @@ export async function addNewItem(req: Request, res: Response, next: NextFunction
 
 export async function updateStock(req: Request, res: Response, next: NextFunction) {
    const { sessionToken, roles } = req.user;
-   const { id, detailsP } = req.body;
+   const { id, details } = req.body;
 
-   const details = detailsP as { color: string, sizes: { stock: number, size: string }[] }[];
+   const detailsP = details as { color: string, sizes: { stock: number, size: string }[] }[];
 
    if (!roles.includes("uploading")) {
       const error = new Error("You are not allowed to visit this route.") as CustomError;
@@ -239,13 +239,13 @@ export async function updateStock(req: Request, res: Response, next: NextFunctio
       return next(error);
    }
 
-   if (!(id && details)) {
+   if (!(id && detailsP)) {
       const error = new Error("Missing Information. Please try again.") as CustomError;
       error.status = 400;
       return next(error);
    }
 
-   const allowCreate = details.every(obj => {
+   const allowCreate = detailsP.every(obj => {
       if (!COLORS.includes(obj.color)) {
          return false;
       }
@@ -260,7 +260,7 @@ export async function updateStock(req: Request, res: Response, next: NextFunctio
 
    try {
       let promises: Promise<any>[] = [];
-      details.forEach(obj => {
+      detailsP.forEach(obj => {
             
          obj.sizes.forEach(size => {
             const promise = ItemsDetails.findOrCreate({
@@ -286,7 +286,7 @@ export async function updateStock(req: Request, res: Response, next: NextFunctio
       let i = 0;
       let createdFlag = false;
 
-      details.forEach(obj => {
+      detailsP.forEach(obj => {
          obj.sizes.forEach((size) => {
             const [itemDetail, created] = results[i];
             i++;
@@ -294,7 +294,7 @@ export async function updateStock(req: Request, res: Response, next: NextFunctio
                createdFlag = true;
                return;
             }
-            itemDetail.stock = itemDetail.stock + size.stock;
+            itemDetail.stock = itemDetail.stock + +size.stock;
             promises.push(itemDetail.save());
          })
       });
