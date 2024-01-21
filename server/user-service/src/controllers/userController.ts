@@ -58,19 +58,10 @@ export async function googleUser(req: Request<{}, {}, { access_token: string }>,
          }
       } as any);
 
-      // if (!cartResponse.ok) {
-      //    const error = new Error("Error getting cart data.") as CustomError;
-      //    error.status = 400;
-      //    return next(error);
-      // }
-
-      const cartItems = await cartResponse.json();
-
       req.user = {
          id: user.id,
          name: user.name,
          email,
-         cartItemsCount: cartItems.length,
       }
 
       return next();
@@ -113,17 +104,13 @@ export async function facebookUser(req: Request, res: Response, next: NextFuncti
             email: email || null,
             phone_number: phone_number || null,
          }
-      });
+      }) as any;
 
-      // const cartItemsCount = created ? 0 : await Cart.count({ where: { user_id: user.id } });
-
-      // req.user = {
-      //    id: user.id,
-      //    name: user.name,
-      //    email,
-      //    phone_number,
-      //    cartItemsCount,
-      // }
+      req.user = {
+         id: user.id,
+         name: user.name,
+         email,
+      }
       return next();
 
    } catch (e) {
