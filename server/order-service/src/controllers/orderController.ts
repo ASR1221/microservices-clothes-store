@@ -43,12 +43,12 @@ export async function makeOrder(req: Request, res: Response, next: NextFunction)
       }
 
        let unavalibaleMessage = cartItems.reduce((acc, current) => {
-         if (current.itemsDetail.stock >= current.item_count) return acc;
-         return acc + ` [only ${current.itemsDetail.stock} instances of the item with id ${current.itemsDetail.id} exsist]`;
+         if (current.stock >= current.item_count) return acc;
+         return acc + ` [only ${current.stock} instances of the item with id ${current.itemDetailsId} exsist]`;
       }, "");
 
       if (unavalibaleMessage) {
-         const error = new Error(`Not enough items as following:${unavalibaleMessage}`) as CustomError;
+         const error = new Error(`Not enough items as following: ${unavalibaleMessage}`) as CustomError;
          error.status = 400;
          return next(error);
       }
@@ -82,66 +82,71 @@ export async function makeOrder(req: Request, res: Response, next: NextFunction)
          user_id,
       }) as any;
 
-      const items = cartItems.map((item) => {
-         item = { ...item.dataValues };
-         delete item.itemsDetail;
-         item.order_id = order.id;
-         return item;
-      });
+      const items = cartItems.map((item) => ({
+            order_id: order.id,
+            item_count: item.item_count,
+            total_price: item.total_price,
+            item_details_id: item.itemDetailsId,
+         })
+      );
       
       await OrderItems.bulkCreate(items);
 
-      // Payment here
-      const ZAINCASH_URL = process.env.URL as string;
-      const TRANSACTION_INIT_ROUTE = process.env.TRANSACTION_INIT_ROUTE as string;
-      const MSISDN = process.env.MSISDN as string;
-      const MERCHANT_ID = process.env.MERCHANT_ID as string;
-      const MERCHANT_SECRET = process.env.MERCHANT_SECRET as string;
+      if (payment_method === "credit-card" && payment_service === "ZainCash") {
+         // Payment here
+         const ZAINCASH_URL = process.env.URL as string;
+         const TRANSACTION_INIT_ROUTE = process.env.TRANSACTION_INIT_ROUTE as string;
+         const MSISDN = process.env.MSISDN as string;
+         const MERCHANT_ID = process.env.MERCHANT_ID as string;
+         const MERCHANT_SECRET = process.env.MERCHANT_SECRET as string;
 
-      const data = {
-         amount: order_price,
-         serviceType: "clothes order",
-         msisdn: MSISDN,
-         orderId: order.id,
-         redirectUrl: `${process.env.ORDER_SERVICE_URL}/order/payment/complete`,
-      };
-
-      let token: string;
-      jwt.sign(data, MERCHANT_SECRET, {
-         expiresIn: Date.now() + (1000 * 10),
-      }, async (err, token) => {
-         if (err) {
-            return next(err);
-         }
-
-         const postData = {
-            token,
-            merchantId: MERCHANT_ID,
-            lang: "en",
+         const data = {
+            amount: order_price,
+            serviceType: "clothes order",
+            msisdn: MSISDN,
+            orderId: order.id,
+            redirectUrl: "http://localhost:3006",
          };
 
-         const response = await fetch(`${ZAINCASH_URL}${TRANSACTION_INIT_ROUTE}`, {
-            method: "POST",
-            headers: {
-               'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(postData),
+         let token: string;
+         jwt.sign(data, MERCHANT_SECRET, {
+            expiresIn: Date.now() + (1000 * 10),
+         }, async (err, token) => {            
+            if (err) {
+               return next(err);
+            }
+
+            const postData = {
+               token,
+               merchantId: MERCHANT_ID,
+               lang: "en",
+            };
+
+            const response = await fetch(`${ZAINCASH_URL}${TRANSACTION_INIT_ROUTE}`, {
+               method: "POST",
+               headers: {
+                  'Content-Type': 'application/json',
+               },
+               body: JSON.stringify(postData),
+            });
+
+            if (!response.ok) {
+               return next(`ZAINCASH ERROR: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+
+            res.status(200).json({ id: data.id, sessionToken, });
          });
-
-         if (!response.ok) {
-            return next(`ZAINCASH ERROR: ${response.statusText}`);
-         }
-
-         const data = await response.json();
-
-         res.status(200).json({ id: data.id, sessionToken, });
-      });
+      } else {
+         res.status(200).json({ message: "Order made successfully.", sessionToken, });
+      }
       
       // run a check to see if more items are available and update accordinglly
       async function onFinish() {
          try {
 
-            await fetch(`${process.env.CART_SERVICE_URL}/remove`, {
+            fetch(`${process.env.CART_SERVICE_URL}/remove`, {
                method: "DELETE",
                headers: {
                   "Authorization": req.headers.authorization as string,
@@ -159,32 +164,31 @@ export async function makeOrder(req: Request, res: Response, next: NextFunction)
             
             const items: ItemToDecrement[] = []
             cartItems.map(item => {
-               if (items.find(i => i.item_id === item.itemsDetail.item_id)) {
-                  items.find(i => i.item_id === item.itemsDetail.item_id)?.details
+               if (items.find(i => i.item_id === item.itemId)) {
+                  items.find(i => i.item_id === item.itemId)?.details
                      .push({
-                        item_details_id: item.item_details_id,
+                        item_details_id: item.itemDetailsId,
                         item_count: item.item_count,
                      });
                } else {
                   items.push({
-                     item_id: item.itemsDetail.item_id,
+                     item_id: item.itemId,
                      details: [{
-                        item_details_id: item.item_details_id,
+                        item_details_id: item.itemDetailsId,
                         item_count: item.item_count,
                      }]
                   });
                }
             });
 
-            await Promise.all(
-               items.map(i => fetch(`${process.env.CART_SERVICE_URL}/remove`, {
-                  method: "PATCH",
-                  headers: {
-                     "Authorization": req.headers.authorization as string,
-                  },
-                  body: JSON.stringify(i),
-               }))
-            );
+            items.forEach(i => fetch(`${process.env.ITEM_SERVICE_URL}/stock/decrement`, {
+               method: "PATCH",
+               headers: {
+                  "Content-Type": "application/json",
+                  // "Authorization": req.headers.authorization as string,
+               },
+               body: JSON.stringify(i),
+            }));
                         
          } catch (e) {
             console.log(e);
@@ -235,7 +239,7 @@ export async function getOrderDetails(req: Request, res: Response, next: NextFun
 
       const orderItemsTemp = await Promise.all(promises);
 
-      const orderItems = await Promise.all(orderDetails.map(o => {
+      const orderItems = await Promise.all(orderItemsTemp.map(o => {
          if (!o.ok) {
             const error = new Error(`items-service response error: ${o.statusText}`) as CustomError;
             error.status = o.status;
@@ -243,8 +247,22 @@ export async function getOrderDetails(req: Request, res: Response, next: NextFun
          }
          return o.json();
       }));
-
-      return res.status(200).json(orderItems);
+      
+      const final = orderDetails.map(d => {
+         const item = orderItems.find(x => x.itemDetailsId === d.item_details_id);
+         return {
+            id: d.id,
+            item_count: d.item_count,
+            itemDetailsId: d.item_details_id,
+            size: item.size,
+            color: item.color,
+            name: item.name,
+            price: item.price,
+            itemId: item.itemId,
+            img: item.img,
+         }
+      })
+      return res.status(200).json(final);
    } catch (e) {
       return next(e);
    }
@@ -253,7 +271,7 @@ export async function getOrderDetails(req: Request, res: Response, next: NextFun
 
 export async function completePayment(req: Request, res: Response, next: NextFunction) {
 
-   const token = req.body.token;
+   const token = req.query.token as string;
    const MERCHANT_SECRET = process.env.MERCHANT_SECRET as string;
 
    if (!token) {
@@ -269,8 +287,9 @@ export async function completePayment(req: Request, res: Response, next: NextFun
       try {
          await Order.update({
             payment_status: payload.status === "failed" || payload.status === "pending" ? "failed" : "completed",
+            transaction_id: payload.id
          }, {
-            where: { id: payload.id, transaction_id: payload.id }
+            where: { id: payload.orderid }
          });
 
          return res.status(200);
