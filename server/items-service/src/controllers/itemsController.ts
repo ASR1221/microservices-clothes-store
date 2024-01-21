@@ -270,8 +270,10 @@ export async function decrementStock(req: Request, res: Response, next: NextFunc
       }) as any[];
 
       if (allItemDetails.some((item) => item.stock > 0) === false) {
-         await Items.update({ available: false }, { where: { id: item.item_id } });
+         Items.update({ available: false }, { where: { id: item.item_id } });
       }
+      
+      return res.status(200).json({ message: "Item Decremented" });
       
    } catch (e) {
       return next(e);
