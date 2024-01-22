@@ -24,7 +24,7 @@ export async function listServedItems(req: Request, res: Response, next: NextFun
    }
 
    if (!(from && to)) {
-      const error = new Error("You have to specify the 'from' and the 'to' or both.") as CustomError;
+      const error = new Error("You have to specify 'from' and 'to' in search params") as CustomError;
       error.status = 400;
       return next(error);
    }
@@ -40,25 +40,13 @@ export async function listServedItems(req: Request, res: Response, next: NextFun
                [Op.between]: [from, to]
             },
          },
-         attributes: { exclude: ["served", "user_id", "updatedAt"] },
-         include: {
-            model: Users,
-            attributes: { exclude, },
-         },
+         attributes: { exclude: ["served",] },
       }) as any[];
 
       const result = await Promise.all(orders.map(order =>
          OrderItems.findAll({
             where: { order_id: order.id },
-            attributes: ["item_count", "total_price"],
-            include: {
-               model: ItemsDetails,
-               attributes: ["size", "color"],
-               include: {
-                  model: Items,
-                  attributes: ["id", "name", "price", "section", "type"],
-               } as any
-            }
+            attributes: ["item_count", "total_price", "item_details_id"],
          })
       ));
 
@@ -93,10 +81,6 @@ export async function listPendingItems(req: Request, res: Response, next: NextFu
             served: false,
          },
          attributes: { exclude: ["served", "user_id", "updatedAt"] },
-         include: {
-            model: Users,
-            attributes: { exclude: ["id", "createdAt", "updatedAt"] },
-         },
       }) as any[];
    
       const result = await Promise.all(orders.flatMap(order => {
@@ -105,15 +89,7 @@ export async function listPendingItems(req: Request, res: Response, next: NextFu
          }
          return OrderItems.findAll({
             where: { order_id: order.id },
-            attributes: ["item_count", "total_price"],
-            include: {
-               model: ItemsDetails,
-               attributes: ["size", "color"],
-               include: {
-                  model: Items,
-                  attributes: ["Id", "name", "price", "section", "type"],
-               } as any,
-            }
+            attributes: ["item_count", "total_price", "item_details_id"],
          });
       }));
 
