@@ -1,0 +1,53 @@
+.navBar {
+   grid-template-columns: repeat(4, 1fr); 
+   justify-items: center;
+   width: 100%;
+   height: min(14vw, 8%);
+   padding: 10px 20px;
+   background-color: white;
+   border: 1px solid black;
+   border-bottom: 0;
+   border-radius: 18px 18px 0 0;
+   position: fixed;
+   bottom: 0;
+   z-index: 100;
+}
+
+.navBar a {
+   width: min(38%, 32px);
+}
+
+.navBar a:first-child {
+   width: min(40%, 35px);
+}
+
+.navBar a.active {
+   border-bottom: 1px solid black;
+}
+
+
+.navBar .active {
+   border-bottom: 2px solid black;
+}
+
+@media (min-width: 550px) {
+
+   .navBar {
+      height: min(8vw, 8%);
+      width: min(50%, 400px);
+      border-radius: 0 0 18px 18px;
+      top: -5px;
+      bottom: auto;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 1px solid black;
+   }
+
+   .navBar a {
+      width: min(40%, 33px);
+   }
+
+   .navBar a:first-child {
+      width: min(42%, 35px);
+   }
+}

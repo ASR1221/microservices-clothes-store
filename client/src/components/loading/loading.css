@@ -1,0 +1,22 @@
+.loading-container {
+   width: fit-content;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   margin-inline: auto;
+}
+
+.loading {
+   transform: rotate(-30deg);
+   animation: loading 2s infinite .5s alternate ease-in-out;
+   padding: 5px;
+}
+
+@keyframes loading {
+   0% {
+      transform: rotate(-30deg);
+   }
+   100% {
+      transform: rotate(30deg);
+   }
+}
