@@ -1,0 +1,19 @@
+.btn {
+   outline: none;
+   border: 1.5px solid black;
+   padding-inline: .8rem;
+   padding-block: .25rem;
+   border-radius: 8px;
+   background-color: white;
+   cursor: pointer;
+}
+
+.btn:hover {
+   color: white;
+   background-color: black;
+}
+
+.btn:disabled:hover {
+   background-color: white;
+   color: rgba(0, 0, 0, 0.267);
+}

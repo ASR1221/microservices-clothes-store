@@ -1,0 +1,38 @@
+.card-container {
+   width: 100%;
+   border-radius: 10px;
+   padding: 4px;
+}
+
+.card-container .placeholder {
+   width: 100%;
+   aspect-ratio: 5/6;
+   background-color: rgba(177, 177, 177, 0.67);
+   border-radius: 11px;
+   overflow: hidden;
+}
+
+.card-img {
+   aspect-ratio: 5/6;
+   object-position: center;
+}
+
+.card-text {
+   padding: 3px;
+   margin-inline: auto;
+   display: grid;
+   grid-template-columns: 4fr 1fr;
+   gap: 2px;
+}
+
+.card-text p {
+   margin-block: 0;
+}
+
+.card-container:hover p {
+   font-weight: 700;
+}
+
+.card-container:hover .card-img{
+   transform: scale(1.05);
+}
