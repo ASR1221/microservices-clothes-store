@@ -1,0 +1,102 @@
+.home-carousel {
+   position: relative;
+   height: 95vh;
+   overflow-x: scroll;
+   overflow-y: hidden;
+   grid-auto-flow: column;
+   grid-auto-columns: 100%;
+   scroll-behavior: smooth;
+   scroll-snap-type: inline mandatory;
+   scrollbar-width: none;      /* firefox */
+}
+
+.home-carousel > * {
+   scroll-snap-align: center;
+   scroll-snap-stop: always;
+}
+
+.home-carousel::-webkit-scrollbar{     /* webkit */
+   display: none;
+}
+
+.home-carousel-placeholder {
+   height: 100%;
+   width: 100%;
+}
+
+.home-carousel-img {
+   height: 100%;
+   overflow: hidden;
+   scroll-snap-align: start;
+}
+
+.home-carousel-img.women {
+   object-position: 100% 100%;
+}
+
+.home-carousel-navigator {
+   background-color: white;
+   border-radius: 10px;
+   width: min(80px, 20%);
+   height: 8px;
+   padding: 1px;
+   z-index: 3;
+   position: absolute;
+   top: 79%;
+   left: 50%;
+   transform: translateX(-50%);
+   display: flex;
+   align-items: center;
+}
+
+.home-carousel-navigator div {
+   background-color: black;
+   border-radius: 10px;
+   margin: 1px;
+   width: 33%;
+   height: 80%;
+   transition: .2s;
+}
+
+.leftScrollBtn, .rightScrollBtn {
+   display: none;
+}
+
+@media (min-width: 550px) {
+   .home-carousel, .home-carousel-img {
+      height: min(45vw, 420px);
+   }
+
+   .leftScrollBtn, .rightScrollBtn {
+      display: inline;
+      background-color: white;
+      border: 1px solid black;
+      border-radius: 0 50% 50% 0;
+      width: 30px;
+      height: 30px;
+      padding: 5px;
+      position: absolute;
+      top: 25%;
+      z-index: 1;
+      cursor: pointer;
+   }
+   
+   .leftScrollBtn {
+      left: -1px;
+   }
+   
+   .rightScrollBtn {
+      right: -1px;
+      transform: rotate(180deg);
+   }
+
+   .leftScrollBtn:hover, .rightScrollBtn:hover {
+      background-color: rgb(239, 239, 239);
+   }
+
+   .scrollBtnImg {
+      width: 150%;
+      height: 150%;
+      transform: translate(-3px, -5px);
+   }
+}

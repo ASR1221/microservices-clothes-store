@@ -6,12 +6,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api/user': "http://localhost:3001",
-      '/api/items': "http://localhost:3002",
-      '/api/cart': "http://localhost:3003",
-      '/api/order': "http://localhost:3004",
-      '/api/admin': "http://localhost:3005",
-      '/images': "http://localhost:3002",
+      '/api/user': "http://ms-asr-store-user-deployment",
+      '/api/items': "http://ms-asr-store-item-deployment",
+      '/api/cart': "http://ms-asr-store-cart-deployment",
+      '/api/order': "http://ms-asr-store-order-deployment",
+      '/api/admin': "http://ms-asr-store-admin-deployment",
+      '/images': "http://ms-asr-store-item-deployment",
     },
   },
 });

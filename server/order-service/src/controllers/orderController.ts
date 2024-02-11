@@ -94,7 +94,7 @@ export async function makeOrder(req: Request, res: Response, next: NextFunction)
 
       if (payment_method === "credit-card" && payment_service === "ZainCash") {
          // Payment here
-         const ZAINCASH_URL = process.env.URL as string;
+         const ZAINCASH_URL = process.env.ZC_URL as string;
          const TRANSACTION_INIT_ROUTE = process.env.TRANSACTION_INIT_ROUTE as string;
          const MSISDN = process.env.MSISDN as string;
          const MERCHANT_ID = process.env.MERCHANT_ID as string;

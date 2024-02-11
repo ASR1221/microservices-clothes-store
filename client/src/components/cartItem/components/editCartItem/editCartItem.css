@@ -1,0 +1,45 @@
+.editDialog-container {
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   translate: -50% -50%;
+   height: 80vh;
+   width: min(90%, 420px);
+   padding: 7px;
+   border: none;
+   border-radius: 15px;
+   box-shadow: 0 0 5px rgba(255, 255, 255, 0.25);
+}
+
+.editDialog-container::backdrop {
+   background-color: rgba(0, 0, 0, 0.6);
+}
+
+.editDialog-container .responsive-margin {
+   margin-inline: 10px !important;
+}
+
+.editDialog-details-container {
+   height: 100%;
+   overflow-y: scroll;
+   padding-bottom: 50px;
+}
+
+.editDialog-actions-container {
+   justify-content: space-evenly;
+   position: fixed;
+   bottom: 0px;
+   width: 90%;
+   padding: 10px;
+   background-color: white;
+}
+
+@media (min-width: 450px) {
+   .editDialog-container .itemDetails-imgs-container {
+      height: 420px !important;
+   }
+   
+   .editDialog-container .itemDetails-smallImgs-container {
+      height: 400px;
+   }
+}

@@ -1,0 +1,117 @@
+.home-main {
+   position: absolute;
+   height: 100vh;
+   scroll-behavior: smooth;
+   top: 83%;
+   z-index: 10;
+   background-color: white;
+   box-shadow: 0 0 5px rgba(0, 0, 0, 0.432);
+   padding-bottom: 30%;
+}
+
+.home-main > *:not(.home-main-slideIndecator-div) {
+   padding: 0 15px;
+}
+
+.home-main, .home-main-slideIndecator-div {
+   border-radius: 18px;
+}
+
+.home-main-slideIndecator-div {
+   position: -webkit-sticky;
+   position: sticky;
+   top: 0;
+   z-index: 100;
+   background-color: white;
+   height: 15px;
+   padding: 15px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.home-main-slideIndecator-p {
+   position: relative;
+}
+
+.home-main-slideIndecator-p::after, .home-main-slideIndecator-p::before, .home-main-slideIndecator-p {
+   background-color: rgba(0, 0, 0, 0.464);
+   border-radius: 3px;
+   width: 30px;
+   height: 1px;
+}
+
+.home-main-slideIndecator-p::after, .home-main-slideIndecator-p::before {
+   content: "";
+   position: absolute;
+}
+
+.home-main-slideIndecator-p::after {
+   top: 3.5px;
+}
+
+.home-main-slideIndecator-p::before {
+   top: -3px;
+}
+
+@media (min-width: 550px) {
+
+   .home-main {
+      position: relative;
+      height: auto;
+      border-radius: 0;
+      box-shadow: 0 0 0;
+      padding-block: 20px;
+   }
+
+   .home-main > *:not(.home-main-slideIndecator-div) {
+      padding-inline: 10%;
+   } 
+
+   .home-main-slideIndecator-div {
+      display: none;
+   }
+
+}
+
+.intro {
+   background-color: white;
+   width: 100vw;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   z-index: 1000;
+   grid-template-columns: 1fr;
+   align-items: center;
+   justify-content: center;
+   animation: intro 1s 3.5s forwards;
+}
+
+.intro-inner {
+   width: 120px;
+}
+
+.intro-inner > p {
+   width: fit-content;
+   margin: 5px auto;
+}
+
+.intro-inner > img {
+   animation: intro-image1 1s 3.5s forwards, intro-image2 3.5s;
+}
+
+@keyframes intro {
+   from { left: 0; }
+   to { left: -200%; }
+}
+
+@keyframes intro-image1 {
+   from { rotate: 0deg; }
+   to { rotate: -360deg; }
+}
+
+@keyframes intro-image2 {
+   0% { scale: 1; }
+   50% { scale: 1.05; }
+   100% { scale: 1; }
+}

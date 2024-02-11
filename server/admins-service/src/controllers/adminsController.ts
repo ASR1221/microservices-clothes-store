@@ -140,10 +140,12 @@ export async function addNewItem(req: Request, res: Response, next: NextFunction
          throw error;
       }
 
+      const files = req.files as any;
+
       item = await Items.create({
          name,
          price,
-         image_path: `/images/items/${req.files.images[0].filename}`,
+         image_path: `/images/items/${files?.images[0].filename}`,
          section,
          type,
       }) as any;
@@ -151,7 +153,7 @@ export async function addNewItem(req: Request, res: Response, next: NextFunction
       let promises: Promise<any>[] = [];
 
       for (let i = 0; i < 3; i++) {
-         const imagePath = `/images/items/${req.files.images[i].filename}`;
+         const imagePath = `/images/items/${files?.images[i].filename}`;
          const promise = ItemsImages.create({
             item_id: item.id,
             path: imagePath,
@@ -182,9 +184,11 @@ export async function addNewItem(req: Request, res: Response, next: NextFunction
    } catch (e) {
       try {
 
-         if (req.files.images) {
+         const files = req.files as any;
+
+         if (files?.images) {
             for (let i = 0; i < 3; i++) {
-               fs.unlink(req.files.images[i].path, (err) => {
+               fs.unlink(files.images[i].path, (err) => {
                   if (err) throw err;
                });
             }

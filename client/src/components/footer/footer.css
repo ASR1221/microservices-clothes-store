@@ -1,0 +1,27 @@
+footer {
+   background-color: white;
+   width: 100%;
+   flex-wrap: wrap;
+   flex-direction: column-reverse;
+   align-items: center;
+   justify-content: center;
+   gap: 9vw;
+   padding: 5%;
+   padding-bottom: calc(5% + 35px);
+   box-shadow: 0 0 3px rgba(0, 0, 0, 0.199);
+   bottom: 0;
+}
+
+.footer-img {
+   width: min(20%, 90px);
+}
+
+.footer-text a:hover {
+   text-decoration: underline;
+}
+
+@media (min-width: 500px) {
+   footer {
+      flex-direction: row;
+   }
+}

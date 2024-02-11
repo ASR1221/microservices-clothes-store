@@ -1,0 +1,71 @@
+.user-body {
+   min-height: 100vh;
+}
+
+.user-container {
+   padding: 4% 7%;
+}
+
+.logo-container {
+   width: min(16%, 70px);
+}
+
+.user-admin-container,
+.user-info-container,
+.user-report-container {
+   border: 1px solid black;
+   padding: 15px;
+   border-radius: 13px;
+   margin-bottom: 17px;
+}
+
+.user-info-container {
+   margin-top: 40px;
+}
+
+.user-info-name-container {
+   margin-block: 10px 30px;
+}
+
+.user-info-name-container > * {
+   margin-block: -3px;
+}
+
+.user-info-name-container > p {
+   padding-left: 5px;
+}
+
+.user-info-actions-container > * {
+   margin-block: 5px;
+}
+
+.user-hover {
+   cursor: pointer;
+}
+
+.user-hover:hover {
+   text-decoration: underline;
+}
+
+.user-notLogged {
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   margin-block: 40%;
+}
+
+.user-notLogged > h1 {
+   margin-bottom: 30px;
+}
+
+@media (min-width: 450px) {
+   .user-inner-container {
+      padding-inline: 10%;
+   }
+}
+
+@media (min-width: 600px) {
+   .user-inner-container {
+      padding-inline: 20%;
+   }
+}

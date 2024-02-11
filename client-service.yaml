@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-asr-store-client-deployment
+  labels:
+    app: ms-asr-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-asr-store-client
+  template:
+    metadata:
+      labels:
+        app: ms-asr-store-client
+    spec:
+      containers:
+      - name: ms-asr-store-client
+        image: client-service:v1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3006
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ms-asr-store-client-service
+  labels:
+    app: ms-asr-store
+spec:
+  selector:
+    app: ms-asr-store-client
+  type: NodePort
+  ports:
+  - name: user-port
+    port: 3006
+    targetPort: 3006
+    nodePort: 30006

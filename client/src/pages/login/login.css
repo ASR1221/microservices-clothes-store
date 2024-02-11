@@ -1,0 +1,39 @@
+.login-container {
+   width: min(90vw, 400px);
+   margin-block: 17vh;
+   margin-inline: auto;
+   text-align: center;
+}
+
+.login-container img {
+   margin-bottom: 20px;
+}
+
+.login-container > p {
+   margin-block: 30px;
+}
+
+.login-btn {
+   display: block;
+   width: 170px;
+   margin-block: 10px;
+   margin-inline: auto;
+   padding-block: 7px;
+   padding-left: 45px;
+   text-align: start;
+}
+
+.login-btn.google:hover {
+   background-color: red;
+}
+
+.login-btn.facebook:hover {
+   background-color: blue;
+}
+
+.login-btn-img {
+   width: 18%;
+   top: 2px;
+   left: 7px;
+   z-index: 10;
+}

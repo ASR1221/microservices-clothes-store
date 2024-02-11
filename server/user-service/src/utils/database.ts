@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== "production") {
 
 // Database connection
 const sequelizeDB = new Sequelize({
-   database: process.env.MYSQLDATABASE,
+   database: process.env.USERDATABASE,
    username: process.env.MYSQLUSER,
    password: process.env.MYSQLPASSWORD,
    host: process.env.MYSQLHOST,

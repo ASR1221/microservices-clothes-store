@@ -1,0 +1,37 @@
+.uploading-name-container {
+   grid-template-columns: 1fr 3fr;
+   gap: 5px;
+   margin-block: 15px;
+}
+
+.uploading-color-container {
+   border: 1px solid black;
+   border-radius: 13px;
+   padding: 10px;
+   margin-block: 10px;
+}
+
+.uploading-color-container > *, .uploading-file-container > * {
+   margin: 3px 5px;
+}
+
+.uploading-color-select {
+   margin-inline: 15px;
+}
+
+.uploading-file-container {
+   width: 50%;
+}
+
+.uploading-file-container > input[type=file] {
+   margin-block: 10px;
+   margin-left: 20px;
+}
+
+.uploading-file-container > input[type=file]::file-selector-button {
+   border: 1px solid black;
+   background-color: white;
+   border-radius: 5px;
+   padding: 5px;
+   font-family: body;
+}

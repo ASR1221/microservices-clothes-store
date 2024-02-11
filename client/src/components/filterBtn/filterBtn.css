@@ -1,0 +1,7 @@
+.filterBtn {
+   padding-inline: 10px;
+   border-radius: 12px;
+   border: 1px solid black;
+   font-size: 1rem;
+   cursor: pointer;
+}

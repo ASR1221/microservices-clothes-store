@@ -1,0 +1,13 @@
+.userDetails-fields-container {
+   grid-template-columns: 2fr 3fr;
+   gap: 5px;
+   margin-block: 15px;
+}
+
+.userDetails-choose-header {
+   padding-block: 20px 7px;
+}
+
+.userDetails-choose-container button {
+   margin-inline: 5px;
+}

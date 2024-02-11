@@ -1,0 +1,18 @@
+.home-main-types {
+   flex-wrap: wrap;
+   gap: 5px;
+   margin-inline: 7px;
+   margin-block: 10px;
+}
+
+.home-main-items {
+   grid-template-columns: 1fr 1fr;
+   gap: 10px;
+   padding-bottom: 45px;
+}
+
+@media (min-width: 450px) {
+   .home-main-items {
+      grid-template-columns: repeat(3, 1fr);
+   }
+}

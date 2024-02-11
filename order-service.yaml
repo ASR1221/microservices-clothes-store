@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-asr-store-order-deployment
+  labels:
+    app: ms-asr-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-asr-store-order
+  template:
+    metadata:
+      labels:
+        app: ms-asr-store-order
+    spec:
+      containers:
+      - name: ms-asr-store-order
+        image: order-service:v1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3004
+        env:
+        - name: MYSQLUSER
+          valueFrom:
+            secretKeyRef:
+              name: ms-asr-store-secert
+              key: MYSQLUSER
+        - name: MYSQLPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ms-asr-store-secert
+              key: MYSQLPASSWORD
+        - name: MSISDN
+          valueFrom:
+            secretKeyRef:
+              name: ms-asr-store-secert
+              key: MSISDN
+        - name: MERCHANT_ID
+          valueFrom:
+            secretKeyRef:
+              name: ms-asr-store-secert
+              key: MERCHANT_ID
+        - name: MERCHANT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ms-asr-store-secert
+              key: MERCHANT_SECRET
+        - name: ZC_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-configmap
+              key: ZC_URL
+        - name: TRANSACTION_INIT_ROUTE
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-configmap
+              key: TRANSACTION_INIT_ROUTE
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-configmap
+              key: NODE_ENV
+        - name: ORDER_SERVICE_PORT
+          value: "3004"
+        - name: MYSQLHOST
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-configmap
+              key: MYSQLHOST
+        - name: MYSQLPORT
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-configmap
+              key: MYSQLPORT
+        - name: ORDERDATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-configmap
+              key: ORDERDATABASE
+        - name: ITEM_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-configmap
+              key: ITEM_SERVICE_URL
+        - name: USER_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-configmap
+              key: USER_SERVICE_URL
+        - name: CART_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-configmap
+              key: CART_SERVICE_URL
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ms-asr-store-order-service
+  labels:
+    app: ms-asr-store
+spec:
+  selector:
+    app: ms-asr-store-order
+  type: NodePort
+  ports:
+  - name: user-port
+    port: 3004
+    targetPort: 3004
+    nodePort: 30004

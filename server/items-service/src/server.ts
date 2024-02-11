@@ -44,4 +44,4 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Error handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => res.status(err.status || 500).json({ message: err.message }));
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.ITEM_SERVICE_PORT || 3000);

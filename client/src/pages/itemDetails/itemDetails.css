@@ -1,0 +1,20 @@
+.itemDetails-container {
+   padding: 5% 7%;
+   overflow: hidden !important;
+}
+
+.logo-container {
+   width: min(16%, 70px);
+}
+
+.itemDetails-addToCart-btn {
+   width: fit-content;
+   margin-block: 10px;
+}
+
+@media (min-width: 550px) {
+   .logo-container {
+      margin-top: -5%;
+      margin-left: -5%;
+   }
+}

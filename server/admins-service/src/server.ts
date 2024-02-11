@@ -13,6 +13,14 @@ import router from "./routes/adminsRoute";
 // import ItemsDetails from "./models/itemsDetailsModel.ts";
 // import ItemsImgs from "./models/imagesModel.ts";
 
+declare global {
+   namespace Express {
+      interface Request {
+         user?: any
+      }
+   }
+}
+
 const app = express();
 
 // Development imports
@@ -39,4 +47,4 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Error handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => res.status(err.status || 500).json({ message: err.message }));
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.ADMIN_SERVICE_PORT || 3000);

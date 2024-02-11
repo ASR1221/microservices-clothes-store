@@ -1,0 +1,22 @@
+.colorFilter-border {
+   width: 23px;
+   height: 23px;
+   border-radius: 50%;
+}
+
+.colorFilter-border.selected {
+   border: 1px solid black;
+}
+
+.colorFilter-border.selected .colorFilter {
+   box-shadow: none;
+}
+
+.colorFilter {
+   width: 18px;
+   height: 18px;
+   border-radius: 50%;
+   box-shadow: 0px 0px 7px black;
+   cursor: pointer;
+   margin: 1.9px;
+}

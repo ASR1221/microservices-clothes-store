@@ -3,13 +3,21 @@ import express from "express";
 
 import helmet from "helmet";
 import compression from "compression";
-import dotenv from "dotenv";
+import dotenv from "dotenv"
 import logger from "morgan";
 import sequelizeDB from "./utils/database";
 
 import router from "./routes/cartRoute";
 
 // import Cart from "./models/cartModel";
+
+declare global {
+   namespace Express {
+      interface Request {
+         user?: any,
+      }
+   }
+}
 
 const app = express();
 
@@ -42,4 +50,4 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Error handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => res.status(err.status || 500).json({ message: err.message }));
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.CART_SERVICE_PORT || 3000);

@@ -1,0 +1,16 @@
+.orders-orders-container {
+   margin-bottom: calc(14vw);
+}
+
+.orders-order-container {
+   border: 1px solid black;
+   border-radius: 15px;
+   padding: 3%;
+   margin-bottom: 10px;
+}
+
+.order-time-container {
+   grid-template-columns: 2fr 4fr;
+   gap: 5px;
+   margin-bottom: 5px;
+}
