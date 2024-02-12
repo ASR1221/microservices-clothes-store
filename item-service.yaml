@@ -10,7 +10,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: standard
   hostPath:
-    path: G:/personal_learning/webProjects/microservices-clothes-store/item-service-public-folder
+    path: /g/personal_learning/webProjects/microservices-clothes-store/item-service-public-folder
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -50,9 +50,9 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 3002
-          # volumeMounts:
-          #   - name: ms-asr-store-item-volume
-          #     mountPath: /public
+          volumeMounts:
+            - name: ms-asr-store-item-volume
+              mountPath: /public
           env:
             - name: MYSQLUSER
               valueFrom:
@@ -98,7 +98,7 @@ spec:
     app: ms-asr-store-item
   type: NodePort
   ports:
-  - name: user-port
+  - name: item-port
     port: 3002
     targetPort: 3002
     nodePort: 30002

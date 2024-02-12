@@ -105,7 +105,7 @@ spec:
     app: ms-asr-store-order
   type: NodePort
   ports:
-  - name: user-port
+  - name: order-port
     port: 3004
     targetPort: 3004
     nodePort: 30004

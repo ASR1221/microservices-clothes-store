@@ -75,7 +75,7 @@ spec:
     app: ms-asr-store-cart
   type: NodePort
   ports:
-  - name: user-port
+  - name: cart-port
     port: 3003
     targetPort: 3003
     nodePort: 30003

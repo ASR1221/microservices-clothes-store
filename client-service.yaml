@@ -32,7 +32,7 @@ spec:
     app: ms-asr-store-client
   type: NodePort
   ports:
-  - name: user-port
+  - name: client-port
     port: 3006
     targetPort: 3006
     nodePort: 30006

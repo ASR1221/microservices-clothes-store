@@ -100,7 +100,7 @@ spec:
     app: ms-asr-store-admin
   type: NodePort
   ports:
-  - name: user-port
+  - name: admin-port
     port: 3005
     targetPort: 3005
     nodePort: 30005
