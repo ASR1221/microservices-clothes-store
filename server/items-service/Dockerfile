@@ -27,9 +27,7 @@ COPY ./tsconfig.json .
 RUN npm i
 
 COPY ./src/ .
-COPY ./public/ .
 
-RUN mkdir -p /public/
 RUN mkdir -p /build/
 
 # Expose the port that the application listens on.
