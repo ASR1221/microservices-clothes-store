@@ -19,7 +19,33 @@ spec:
         image: client-service:v1.0
         imagePullPolicy: Never
         ports:
-        - containerPort: 3006
+        - containerPort: 80
+        env:
+        - name: VITE_USER_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-client-configmap
+              key: VITE_USER_SERVICE_URL
+        - name: VITE_ITEM_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-client-configmap
+              key: VITE_ITEM_SERVICE_URL
+        - name: VITE_CART_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-client-configmap
+              key: VITE_CART_SERVICE_URL
+        - name: VITE_ORDER_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-client-configmap
+              key: VITE_ORDER_SERVICE_URL
+        - name: VITE_ADMIN_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ms-asr-store-client-configmap
+              key: VITE_ADMIN_SERVICE_URL
 ---
 kind: Service
 apiVersion: v1
@@ -33,6 +59,7 @@ spec:
   type: NodePort
   ports:
   - name: client-port
-    port: 3006
-    targetPort: 3006
+    protocol: TCP
+    port: 80
+    targetPort: 80
     nodePort: 30006
