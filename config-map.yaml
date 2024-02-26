@@ -6,7 +6,7 @@ metadata:
     app: ms-asr-store
 data:
   NODE_ENV: production
-  MYSQLHOST: "192.168.1.101" # ms-asr-store-db-service
+  MYSQLHOST: "192.168.1.107" # ms-asr-store-db-service
   MYSQLPORT: "3306" # check in 'mysql-db.yaml'
   USER_SERVICE_PORT: "3001"
   ITEM_SERVICE_PORT: "3002"
@@ -18,11 +18,11 @@ data:
   USERDATABASE: user_service
   ITEMDATABASE: item_service
   ORDERDATABASE: order_service
-  USER_SERVICE_URL: http://ms-asr-store-user-deployment/api/user
-  ITEM_SERVICE_URL: http://ms-asr-store-item-deployment/api/items
-  CART_SERVICE_URL: http://ms-asr-store-cart-deployment/api/cart
-  ORDER_SERVICE_URL: http://ms-asr-store-order-deployment/api/order
-  ADMIN_SERVICE_URL: http://ms-asr-store-admin-deployment/api/admin
+  USER_SERVICE_URL: http://192.168.49.2:30001/api/user
+  ITEM_SERVICE_URL: http://192.168.49.2:30002/api/items
+  CART_SERVICE_URL: http://192.168.49.2:30003/api/cart
+  ORDER_SERVICE_URL: http://192.168.49.2:30004/api/order
+  ADMIN_SERVICE_URL: http://192.168.49.2:30005/api/admin
   CLIENT_SERVICE_URL: http://ms-asr-store-client-deployment
   ZC_URL: https://test.zaincash.iq
   TRANSACTION_INIT_ROUTE: /transaction/init

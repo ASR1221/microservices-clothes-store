@@ -26,7 +26,8 @@ COPY ./tsconfig.json .
 
 RUN npm i
 
-COPY ./src/ .
+COPY ./src/ /src/
+COPY ./public/ /public/
 
 RUN mkdir -p /build/
 

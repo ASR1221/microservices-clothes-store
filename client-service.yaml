@@ -20,32 +20,6 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 80
-        env:
-        - name: VITE_USER_SERVICE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: ms-asr-store-client-configmap
-              key: VITE_USER_SERVICE_URL
-        - name: VITE_ITEM_SERVICE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: ms-asr-store-client-configmap
-              key: VITE_ITEM_SERVICE_URL
-        - name: VITE_CART_SERVICE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: ms-asr-store-client-configmap
-              key: VITE_CART_SERVICE_URL
-        - name: VITE_ORDER_SERVICE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: ms-asr-store-client-configmap
-              key: VITE_ORDER_SERVICE_URL
-        - name: VITE_ADMIN_SERVICE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: ms-asr-store-client-configmap
-              key: VITE_ADMIN_SERVICE_URL
 ---
 kind: Service
 apiVersion: v1

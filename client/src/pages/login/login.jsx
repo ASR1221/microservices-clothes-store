@@ -1,22 +1,22 @@
 import "./login.css";
 
-const googleURL = "https://accounts.google.com/o/oauth2/v2/auth?";
-const googleOptions = {
-   client_id: "450145178762-ve8m4krlq5cc02rp54ipkmtktlg58p11.apps.googleusercontent.com",
-   redirect_uri: "http://localhost:3006",
-   response_type: "token",
-   scope: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
-};
-
-const facebookURL = "https://www.facebook.com/v16.0/dialog/oauth?";
-const facebookOptions = {
-   client_id: "1409874359834789",
-   redirect_uri: "http://localhost:3006",
-   response_type: "token",
-   scope: "email",
-};
-
 function Login() {
+
+   const googleURL = "https://accounts.google.com/o/oauth2/v2/auth?";
+   const googleOptions = {
+      client_id: "450145178762-ve8m4krlq5cc02rp54ipkmtktlg58p11.apps.googleusercontent.com",
+      redirect_uri: `http://${location.host}`,
+      response_type: "token",
+      scope: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
+   };
+
+   const facebookURL = "https://www.facebook.com/v16.0/dialog/oauth?";
+   const facebookOptions = {
+      client_id: "1409874359834789",
+      redirect_uri: `http://${location.host}`,
+      response_type: "token",
+      scope: "email",
+   };
 
    return <div className="login-container">
       <img src="/icons/asr-logo.svg" alt="ASR logo" />
