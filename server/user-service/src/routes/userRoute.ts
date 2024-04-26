@@ -1,6 +1,6 @@
 import express from "express";
 
-import { facebookUser, googleUser, setUserInfo, getUserInfo, checkUser, checkRole } from "../controllers/userController";
+import { facebookUser, googleUser, setUserInfo, getUserInfo, checkUser, checkRole, healthCheck } from "../controllers/userController";
 import createSession from "../middlewares/createSession";
 import checkAndRecreateSessionMiddleware from "../middlewares/checkAndRecreateSessionMiddleware";
 
@@ -17,5 +17,7 @@ router.get("/auth/role", checkAndRecreateSessionMiddleware, checkRole);
 router.post("/info/set", checkAndRecreateSessionMiddleware, setUserInfo);
 
 router.get("/info/get", checkAndRecreateSessionMiddleware, getUserInfo);
+
+router.get("/health", healthCheck);
 
 export default router;

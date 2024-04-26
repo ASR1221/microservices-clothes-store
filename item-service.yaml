@@ -20,6 +20,12 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 3002
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 20
+            periodSeconds: 20
           env:
             - name: MYSQLUSER
               valueFrom:

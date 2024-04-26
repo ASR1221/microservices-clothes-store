@@ -279,3 +279,7 @@ export async function decrementStock(req: Request, res: Response, next: NextFunc
       return next(e);
    }
 }
+
+export function healthCheck(req: Request, res: Response, next: NextFunction) {
+   return res.status(200).json({ message: "good" });
+}

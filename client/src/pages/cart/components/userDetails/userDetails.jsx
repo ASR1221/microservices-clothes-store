@@ -53,6 +53,7 @@ const UserDetails = forwardRef(({ setCartItems }, ref) => {
          body: {
             payment_method: type,
             payment_service: type === "credit-card" ? "ZainCash" : null,
+            clientUrl: location.host,
          }
       }, {
          onSuccess: (data) => {

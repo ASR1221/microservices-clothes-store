@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== "production") {
 
 export async function makeOrder(req: Request, res: Response, next: NextFunction) {
    const { user_id, sessionToken } = req.user;
-   const { payment_method, payment_service } = req.body;
+   const { payment_method, payment_service, clientUrl } = req.body;
 
    if (!(payment_method && (payment_method === "cash" || (payment_method === "credit-card" && payment_service)) )) {
       const error = new Error("Missing Information. Please try again.") as CustomError;
@@ -105,7 +105,7 @@ export async function makeOrder(req: Request, res: Response, next: NextFunction)
             serviceType: "clothes order",
             msisdn: MSISDN,
             orderId: order.id,
-            redirectUrl: "http://localhost:3006",
+            redirectUrl: `http://${clientUrl}`
          };
 
          let token: string;
@@ -298,4 +298,8 @@ export async function completePayment(req: Request, res: Response, next: NextFun
       }
 
    });
+}
+
+export function healthCheck(req: Request, res: Response, next: NextFunction) {
+   return res.status(200).json({ message: "good" });
 }
