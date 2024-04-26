@@ -36,7 +36,7 @@ function Orders() {
                   <p><strong>{d.served ? "Served" : "Pending..."}</strong></p>
                   <p>{new Date(d.order_date).toLocaleString()}</p>
                </div>
-               <p>Total price: <b>{d.order_price}$</b></p>
+               <p>Total price: <b>{d.order_price} IQD</b></p>
                <p>Payment method: {d.payment_method}</p>
                
             </div>

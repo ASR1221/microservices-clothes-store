@@ -79,7 +79,7 @@ function ItemDetailsComp({
                </div>
             </section>
             <section className="itemDetails-text-container responsive-margin relative">
-               <h1 className="itemDetails-h1">{data?.item.name}<p className="itemDetails-price absolute">{data?.item.price}$</p></h1>
+               <h1 className="itemDetails-h1">{data?.item.name}<p className="itemDetails-price absolute">{data?.item.price} IQD</p></h1>
                <div>
                   <p>Select color:</p>
                   <div className="flex itemDetails-color-container">
